@@ -85,23 +85,25 @@ class AntiSpoofPredict(Detection):
         return None
 
     def predict(self, img, model_path):
-        st.write("This line is before trans.Compose")
         test_transform = trans.Compose([
             trans.ToTensor(),
         ])
-        st.write("This line is after trans.Compose")
-
-        st.write("This line is before img = test_transform(img)")
         img = test_transform(img)
-        st.write("This line is after img = test_transform(img)")
-        st.write("This line is before unsqueeze")
         img = img.unsqueeze(0).to(self.device)
-        st.write("This line is after unsqueeze")
+
         self._load_model(model_path)
         self.model.eval()
+        
+        st.write("This line is after self.model.eval()")
+        
         with torch.no_grad():
+            st.write("This line is before self.model.forward(img)")
             result = self.model.forward(img)
+            st.write("This line is after  self.model.forward(img)")
+            
+            st.write("This line is before F.softmax(result).cpu().numpy()")
             result = F.softmax(result).cpu().numpy()
+            st.write("This line is after  F.softmax(result).cpu().numpy()")
         return result
 
 
