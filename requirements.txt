@@ -6,6 +6,6 @@ Pillow==10.2.0
 streamlit==1.32.1
 tensorboardX==2.6.2.2
 torch==1.13.1
-torchvision==0.14.1
+torchvision==0.15.0
 tqdm==4.64.1
 urllib3==2.0.7
