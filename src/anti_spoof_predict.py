@@ -13,7 +13,7 @@ import math
 import torch
 import numpy as np
 import torch.nn.functional as F
-
+import streamlit as st
 
 from src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2,MiniFASNetV1SE,MiniFASNetV2SE
 from src.data_io import transform as trans
@@ -85,11 +85,18 @@ class AntiSpoofPredict(Detection):
         return None
 
     def predict(self, img, model_path):
+        st.write("This line is before trans.Compose")
         test_transform = trans.Compose([
             trans.ToTensor(),
         ])
+        st.write("This line is after trans.Compose")
+
+        st.write("This line is before img = test_transform(img)")
         img = test_transform(img)
+        st.write("This line is after img = test_transform(img)")
+        st.write("This line is before unsqueeze")
         img = img.unsqueeze(0).to(self.device)
+        st.write("This line is after unsqueeze")
         self._load_model(model_path)
         self.model.eval()
         with torch.no_grad():
