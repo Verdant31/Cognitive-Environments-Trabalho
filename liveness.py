@@ -40,7 +40,7 @@ def test(image, model_dir, device_id):
     st.write("model_dir", os.listdir(model_dir))
     for model_name in os.listdir(model_dir):
         h_input, w_input, model_type, scale = parse_model_name(model_name)
-
+        st.write("Model was sucessfully parsed ", h_input, w_input, model_type, scale)    
         param = {
             "org_img": image,
             "bbox": image_bbox,
@@ -53,7 +53,9 @@ def test(image, model_dir, device_id):
             param["crop"] = False
         img = image_cropper.crop(**param)
         start = time.time()
+        st.write("This line is before calling the predict")
         prediction += model_test.predict(img, os.path.join(model_dir, model_name))
+        st.write("This line is after calling the predict")
         test_speed += time.time()-start
 
     # draw result of prediction
