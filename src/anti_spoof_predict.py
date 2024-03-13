@@ -93,17 +93,10 @@ class AntiSpoofPredict(Detection):
 
         self._load_model(model_path)
         self.model.eval()
-        
-        st.write("This line is after self.model.eval()")
-        
+
         with torch.no_grad():
-            st.write("This line is before self.model.forward(img)")
             result = self.model.forward(img)
-            st.write("This line is after  self.model.forward(img)")
-            
-            st.write("This line is before F.softmax(result).cpu().numpy()")
             result = F.softmax(result).cpu().numpy()
-            st.write("This line is after  F.softmax(result).cpu().numpy()")
         return result
 
 
