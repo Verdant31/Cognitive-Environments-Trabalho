@@ -1,7 +1,6 @@
 import streamlit as st
 from auth import authenticate
 from handlers import verifyImage
-from test import test
 import cv2
 import numpy as np
 
@@ -39,16 +38,6 @@ if(True):
         loading.write("Processing face recognition...")
         loading.write("Approximate response time: 3 minutes")
         verifyImage(file_buffer)
-
-        cv2_img = cv2.imdecode(np.frombuffer(uploaded_file.getvalue(), np.uint8), cv2.IMREAD_COLOR)
-        liveness_test = test(
-          image=cv2_img,
-          model_dir="./resources/anti_spoof_models",
-          device_id=0
-        )
-
-        if(liveness_test != 1):
-          raise Exception("Your picture was not valid, try to take another one.")
 
         loading.empty()
         st.success("Your picture was valid. Your autentication is completed!")
