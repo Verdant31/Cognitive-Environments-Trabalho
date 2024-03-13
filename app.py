@@ -37,6 +37,7 @@ if(True):
       try:
         loading = st.empty()
         loading.write("Processing face recognition...")
+        loading.write("Approximate response time: 3 minutes")
         verifyImage(file_buffer)
 
         cv2_img = cv2.imdecode(np.frombuffer(uploaded_file.getvalue(), np.uint8), cv2.IMREAD_COLOR)
@@ -45,8 +46,7 @@ if(True):
           model_dir="./resources/anti_spoof_models",
           device_id=0
         )
-        st.write("Liveness test", liveness_test)
-        print("Liveness test", liveness_test)
+
         if(liveness_test != 1):
           raise Exception("Your picture was not valid, try to take another one.")
 
