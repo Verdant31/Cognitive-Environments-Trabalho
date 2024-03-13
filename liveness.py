@@ -11,7 +11,7 @@ import numpy as np
 import argparse
 import warnings
 import time
-
+import streamlit as st
 from src.anti_spoof_predict import AntiSpoofPredict
 from src.generate_patches import CropImage
 from src.utility import parse_model_name
@@ -37,6 +37,7 @@ def test(image, model_dir, device_id):
     prediction = np.zeros((1, 3))
     test_speed = 0
     # sum the prediction from single model's result
+    st.write("model_dir", os.listdir(model_dir))
     for model_name in os.listdir(model_dir):
         h_input, w_input, model_type, scale = parse_model_name(model_name)
 
