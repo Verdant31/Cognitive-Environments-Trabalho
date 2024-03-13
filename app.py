@@ -1,7 +1,7 @@
 import streamlit as st
 from auth import authenticate
 from handlers import verifyImage
-from liveness import test
+from test import test
 import cv2
 import numpy as np
 
@@ -47,7 +47,7 @@ if(True):
         )
         st.write("Liveness test", liveness_test)
         print("Liveness test", liveness_test)
-        if(liveness_test == 1):
+        if(liveness_test != 1):
           raise Exception("Your picture was not valid, try to take another one.")
 
         loading.empty()

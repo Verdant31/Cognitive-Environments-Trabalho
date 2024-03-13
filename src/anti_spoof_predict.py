@@ -13,7 +13,7 @@ import math
 import torch
 import numpy as np
 import torch.nn.functional as F
-import streamlit as st
+
 
 from src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2,MiniFASNetV1SE,MiniFASNetV2SE
 from src.data_io import transform as trans
@@ -90,10 +90,8 @@ class AntiSpoofPredict(Detection):
         ])
         img = test_transform(img)
         img = img.unsqueeze(0).to(self.device)
-
         self._load_model(model_path)
         self.model.eval()
-
         with torch.no_grad():
             result = self.model.forward(img)
             result = F.softmax(result).cpu().numpy()

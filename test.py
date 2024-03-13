@@ -11,12 +11,17 @@ import numpy as np
 import argparse
 import warnings
 import time
-import streamlit as st
+
 from src.anti_spoof_predict import AntiSpoofPredict
 from src.generate_patches import CropImage
 from src.utility import parse_model_name
 warnings.filterwarnings('ignore')
 
+
+SAMPLE_IMAGE_PATH = "./images/sample/"
+
+
+# 因为安卓端APK获取的视频流宽高比为3:4,为了与之一致，所以将宽高比限制为3:4
 def check_image(image):
     height, width, channel = image.shape
     if width/height != 3/4:
@@ -29,6 +34,7 @@ def check_image(image):
 def test(image, model_dir, device_id):
     model_test = AntiSpoofPredict(device_id)
     image_cropper = CropImage()
+    # image = cv2.imread(SAMPLE_IMAGE_PATH + image_name)
     image = cv2.resize(image, (int(image.shape[0] * 3 / 4), image.shape[0]))
     result = check_image(image)
     if result is False:
