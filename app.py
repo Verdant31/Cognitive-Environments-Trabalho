@@ -45,7 +45,8 @@ if(True):
           model_dir="./resources/anti_spoof_models",
           device_id=0
         )
-
+        st.write("Liveness test", liveness_test)
+        print("Liveness test", liveness_test)
         if(liveness_test == 1):
           raise Exception("Your picture was not valid, try to take another one.")
 
