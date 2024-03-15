@@ -37,7 +37,6 @@ for photo_type in photos_types:
             box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
             (startX, startY, endX, endY) = box.astype("int")
             face = img[startY:endY, startX:endX]
-
-            cv2.imwrite("../dataset/" + photo_type + "/img-" + str(saved) + ".png", face)
-            saved += 1
-
+            if len(face) > 0:
+                cv2.imwrite("../dataset/" + photo_type + "/img-" + str(saved) + ".png", face)
+                saved += 1

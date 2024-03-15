@@ -2,3 +2,8 @@
 .venv/*
 venv
 db
+dataset/real
+dataset/fake
+pre_processing/photos/real/*
+pre_processing/photos/fake/*
+pre_processing/videos
