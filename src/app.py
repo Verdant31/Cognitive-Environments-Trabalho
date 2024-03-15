@@ -1,45 +1,63 @@
+import cv2
+import numpy as np
 import streamlit as st
 from auth import authenticate
-from handlers import verifyImage
+from image_handlers import verify_image_liveness, search_image_deformities, check_similarity
+from aws_client import client
 
 st.markdown("<h1 style='text-align: center; '>Login</h1>", unsafe_allow_html=True)
-global authenticated, user
+
+user = None
+authenticated = False
+uploaded_file = None
 
 with st.form("my_form"):
     name = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
+    st.markdown("<p>Suspicious activity has been reported on this account recently, to confirm its authenticity take a "
+                "photo so we can perform facial recognition.</p>", unsafe_allow_html=True)
+
+    # noinspection PyRedeclaration
+    uploaded_file = st.camera_input(label="Your webcam", label_visibility="hidden")
+
     submitted = st.form_submit_button("Submit")
     if submitted:
-        if not name or not password:
-            st.error("Please enter username and password")
+        if not name or not password or not uploaded_file:
+            st.error("Please enter username, password and photo")
         else:
             user = authenticate(name, password)
             if len(user) == 0:
                 st.error("Invalid credentials")
             else:
+                user = user[0]
                 authenticated = True
 
-if (True):
-    st.markdown("<p>Suspicious activity has been reported on this account recently, to confirm its authenticity take a "
-                "photo so we can perform facial recognition.</p>", unsafe_allow_html=True)
+if uploaded_file is not None and authenticated and user is not None:
+    file_buffer = bytearray(uploaded_file.getvalue())
 
-    uploaded_file = st.camera_input(label="Your webcam", label_visibility="hidden")
+    try:
+        loading = st.empty()
+        loading.write("Processing face recognition...")
 
-    if uploaded_file is not None:
-        file_buffer = bytearray(uploaded_file.getvalue())
-        sendImage = st.button("Submit photo")
+        response = client.detect_faces(
+            Image={'Bytes': file_buffer},
+            Attributes=["ALL"]
+        )
 
-        if sendImage:
-            try:
-                loading = st.empty()
-                loading.write("Processing face recognition...")
-                loading.write("Approximate response time: 3 minutes")
-                verifyImage(file_buffer)
+        search_image_deformities(response)
+        check_similarity(user, file_buffer)
+        label, acc = verify_image_liveness(uploaded_file)
 
-                loading.empty()
-                st.success("Your picture was valid. Your autentication is completed!")
-            except Exception as e:
-                loading.empty()
-                print('error', e)
-                st.error(e)
+        if label == "fake":
+            loading.empty()
+            raise Exception(
+                "Our algorithm concluded that you are trying to impersonate someone, please try again. ("
+                "Confidence: " + str(acc) + ")")
+
+        loading.empty()
+        st.success("Authentication completed! Welcome, " + user["name"])
+    except Exception as e:
+        loading.empty()
+        print('error', e)
+        st.error(e)

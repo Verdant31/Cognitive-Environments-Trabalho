@@ -13,6 +13,6 @@ def clear_files_names():
 
         for photo in photos:
             photo_path = "./photos/" + photo_type + "/"
-            new_photo_name = unidecode(photo.replace(" ", "").replace("-", "_"))
+            new_photo_name = unidecode(photo.replace(" ", "").replace("-", "_").replace("#", ""))
 
             os.rename(src=photo_path + photo, dst=photo_path + new_photo_name)
