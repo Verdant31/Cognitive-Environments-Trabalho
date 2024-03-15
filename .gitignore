@@ -1,7 +1,6 @@
 .streamlit/secrets.toml
 .venv/*
 venv
-db
 dataset/real
 dataset/fake
 pre_processing/photos/real/*
