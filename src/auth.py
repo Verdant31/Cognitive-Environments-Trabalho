@@ -2,7 +2,8 @@ from aws_client import client
 
 mocked_users_from_database = [
     {"username": "admin", "name": "Michel", "password": "admin", "img": "./db/admin.jpg"},
-    {"username": "default", "name": "4DTSR", "password": "default", "img": "./db/default_user.png"}
+    {"username": "default", "name": "4DTSR", "password": "default", "img": "./db/default_user.png"},
+    {"username": "amanda", "name": "Amanda", "password": "123", "img": "./db/gf.jpg"}
 ]
 
 
