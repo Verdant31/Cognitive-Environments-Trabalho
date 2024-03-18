@@ -42,7 +42,7 @@ aug = ImageDataGenerator(rotation_range=20, zoom_range=0.15,
 
 print("[INFO] compiling liveness_model...")
 opt = Adam(learning_rate=INIT_LR)
-model = LivenessNet.build(width=32, height=32, depth=3,classes=len(le.classes_))
+model = LivenessNet.build(width=32, height=32, depth=3, classes=len(le.classes_))
 model.compile(loss="binary_crossentropy", optimizer=opt, metrics=["accuracy"])
 
 print("[INFO] training network for {} epochs...".format(EPOCHS))
